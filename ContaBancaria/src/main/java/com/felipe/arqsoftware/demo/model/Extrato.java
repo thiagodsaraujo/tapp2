@@ -24,6 +24,7 @@ public class Extrato {
     private Double saldoAnterior;
     private Double novoSaldo;
 
+
     public Extrato(ContaCorrente contaCorrente, Double saldoAnterior, Double movimentacao, Double novoSaldo) {
         this.contaCorrente = contaCorrente;
         this.saldoAnterior = saldoAnterior;
