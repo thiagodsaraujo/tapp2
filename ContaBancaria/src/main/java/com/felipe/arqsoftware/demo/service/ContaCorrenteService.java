@@ -31,6 +31,7 @@ public class ContaCorrenteService {
     public List<ContaCorrente> findAll() {
         return repository.findAll();
     }
+
     @Transactional
     public ContaCorrenteDto findById(Long id) throws ContaNotFoundException {
         var conta = repository.findById(id);

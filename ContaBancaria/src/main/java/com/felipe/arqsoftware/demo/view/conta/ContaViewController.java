@@ -8,9 +8,7 @@ import com.felipe.arqsoftware.demo.service.ContaCorrenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,22 +24,35 @@ public class ContaViewController {
     private ContaCorrenteService contaCorrenteService;
 
     @GetMapping("/cliente/{clienteId}")
-    public String exibirPainelCliente(@PathVariable Long clienteId, Model model) {
+    public String exibirPainelCliente(@PathVariable Long clienteId,
+                                      @RequestParam(defaultValue = "0") int page,
+                                      Model model) {
         // Busca o cliente pelo ID
         Cliente cliente = clienteService.findById(clienteId);
 
-        // Para cada conta, limitamos o número de extratos a 5
+        // Para cada conta, obtemos as movimentações para a página atual e verificamos se há uma próxima página
         cliente.getContaCorrente().forEach(conta -> {
-            List<Extrato> extratosLimitados = conta.getExtratos().stream()
-                    .limit(5)
-                    .collect(Collectors.toList());
-            conta.setExtratos(extratosLimitados); // Define a lista limitada
+            int start = page * 5;
+            int end = Math.min(start + 5, conta.getExtratos().size());
+
+            // Extratos limitados para a página atual
+            List<Extrato> extratosPaginados = conta.getExtratos().subList(start, end);
+            conta.setExtratos(extratosPaginados);
         });
 
-        // Adiciona o cliente com as contas e extratos limitados ao modelo
+        // Adiciona o cliente com as contas e extratos paginados ao modelo
         model.addAttribute("cliente", cliente);
+        model.addAttribute("page", page);
+
+        // Verifica se há uma próxima página para qualquer conta (apenas um botão global)
+        boolean hasNextPage = cliente.getContaCorrente().stream()
+                .anyMatch(conta -> (page + 1) * 5 < conta.getExtratos().size());
+        model.addAttribute("hasNextPage", hasNextPage);
 
         return "conta-painel";
     }
+
+
+
 }
 

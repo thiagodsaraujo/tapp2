@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,12 +75,34 @@
             padding: 10px;
             border-radius: 5px;
         }
+
+        /* Pagination buttons */
+        .pagination-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        /* Action buttons styling */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .action-buttons a {
+            width: 48%; /* Reduce width for spacing */
+        }
+
+        .action-buttons a:not(:last-child) {
+            margin-right: 5px; /* Add spacing between buttons */
+        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="app-header">Banco TAP</div>
+    <div class="app-header">Banco Roxo</div>
 
     <!-- Client Information -->
     <div class="account-info">
@@ -105,10 +127,21 @@
                 <p><strong>Novo Saldo:</strong> R$ <span th:text="${extrato.novoSaldo}"></span></p>
             </div>
         </div>
-    </div>
 
-    <!-- Button -->
-    <button class="btn btn-primary">Realizar Transferência</button>
+        <!-- Pagination Buttons -->
+        <div class="pagination-buttons">
+            <a th:href="@{/cliente/{clienteId}(clienteId=${cliente.id}, page=${page - 1})}"
+               th:if="${page > 0}" class="btn btn-secondary">Anterior</a>
+            <a th:href="@{/cliente/{clienteId}(clienteId=${cliente.id}, page=${page + 1})}"
+               th:if="${hasNextPage}" class="btn btn-secondary">Próxima</a>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a th:href="@{/conta-painel/transfer/{clienteId}(clienteId=${cliente.id})}" class="btn btn-primary">Realizar Transferência</a>
+            <a th:href="@{/contas/{idConta}/pagarBoleto(idConta=${conta.id})}" class="btn btn-primary">Pagar Boleto</a>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
