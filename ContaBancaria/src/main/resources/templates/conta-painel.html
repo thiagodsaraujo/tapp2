@@ -97,6 +97,33 @@
         .action-buttons a:not(:last-child) {
             margin-right: 5px; /* Add spacing between buttons */
         }
+
+        /* Export buttons styling */
+        .export-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .export-buttons form {
+            width: 48%;
+        }
+
+        .export-buttons button {
+            width: 100%;
+            background-color: #4b0082;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .export-buttons button:hover {
+            background-color: #5c0fbf;
+        }
     </style>
 </head>
 <body>
@@ -141,6 +168,19 @@
             <a th:href="@{/conta-painel/transfer/{clienteId}(clienteId=${cliente.id})}" class="btn btn-primary">Realizar Transferência</a>
             <a th:href="@{/contas/{idConta}/pagarBoleto(idConta=${conta.id})}" class="btn btn-primary">Pagar Boleto</a>
         </div>
+
+        <!-- Export Buttons -->
+        <div class="export-buttons">
+            <!-- Botão para Exportar CSV -->
+            <a th:href="@{/extratos/cliente/{clienteId}/export/csv(clienteId=${cliente.id})}"
+               class="btn btn-primary">Exportar CSV</a>
+
+            <!-- Botão para Exportar PDF -->
+            <a th:href="@{/extratos/cliente/{clienteId}/export/pdf(clienteId=${cliente.id})}"
+               class="btn btn-primary">Exportar PDF</a>
+        </div>
+
+
     </div>
 </div>
 

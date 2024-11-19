@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 public class Extrato {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
