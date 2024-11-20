@@ -65,4 +65,8 @@ public class BoletoService {
             throw new PagamentoRejeitadoException("O boleto informado está pago!");
         }
     }
+
+    public List<Boleto> findByStatus(EnumStatus enumStatus) {
+        return repository.findByStatus(enumStatus);
+    }
 }

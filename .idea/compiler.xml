@@ -10,10 +10,10 @@
         <module name="transferencia" />
         <module name="demo" />
         <module name="BoletoApi" />
-        <module name="Front" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Front" target="17" />
       <module name="gateway" target="17" />
       <module name="namingserver" target="17" />
     </bytecodeTargetLevel>

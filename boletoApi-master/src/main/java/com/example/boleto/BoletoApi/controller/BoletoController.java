@@ -46,6 +46,7 @@ public class BoletoController {
     @PostMapping("/pagarBoleto/{idConta}/{idBoleto}")
     public ResponseEntity<Boleto> pagarBoleto(@PathVariable Long idConta, @PathVariable Long idBoleto)
             throws BoletoNotFoundException, PagamentoRejeitadoException {
+
         return ResponseEntity.accepted().body(service.pagar(idConta, idBoleto));
     }
 }

@@ -1,4 +1,4 @@
-package com.felipe.arqsoftware.demo.view.conta.transferencia;
+package com.felipe.arqsoftware.demo.view.transferencia;
 
 import com.felipe.arqsoftware.demo.model.Cliente;
 import com.felipe.arqsoftware.demo.model.ContaCorrente;
@@ -6,10 +6,13 @@ import com.felipe.arqsoftware.demo.service.ClienteService;
 import com.felipe.arqsoftware.demo.service.ContaCorrenteService;
 import com.felipe.arqsoftware.demo.service.exceptions.ContaNotFoundException;
 import com.felipe.arqsoftware.demo.service.exceptions.SaldoInsuficienteException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/conta-painel/transfer")
@@ -57,25 +60,6 @@ public class TransfViewController {
             return "transferencia-form";
         }
     }
-
-
-//    // Processa a transferência a partir do formulário
-//    @PostMapping("/transferir")
-//    public String operacaoTransferencia(@RequestParam int numContaOrigem,
-//                                        @RequestParam Double valor,
-//                                        @RequestParam int numContaDestino,
-//                                        Model model) {
-//        try {
-//            service.transferir(numContaOrigem, valor, numContaDestino);
-//            return "redirect:/conta-painel/cliente/1"; // Redireciona para o painel da conta origem
-//        } catch (SaldoInsuficienteException e) {
-//            model.addAttribute("error", "Saldo insuficiente para realizar a transferência.");
-//            return "transferencia-form"; // Retorna para o formulário com mensagem de erro
-//        } catch (ContaNotFoundException e) {
-//            model.addAttribute("error", "Conta de origem ou destino não encontrada.");
-//            return "transferencia-form"; // Retorna para o formulário com mensagem de erro
-//        }
-//    }
 
 
 }

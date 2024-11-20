@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 public class ContaCorrenteDto {
+
     private Long id;
     private int agencia;
     private int numeroConta;

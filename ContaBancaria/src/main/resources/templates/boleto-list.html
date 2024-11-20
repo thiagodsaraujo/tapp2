@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento de Boletos - Banco Roxo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Background and central container styles */
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .app-container {
+            background-color: #6a0dad; /* Purple bank color */
+            color: white;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .app-header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            background-color: #ffffff;
+            color: #6a0dad;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .table th {
+            background-color: #6a0dad;
+            color: white;
+        }
+
+        .btn-pay {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pay:hover {
+            background-color: #45a049;
+        }
+
+        .btn-pay:disabled {
+            background-color: #ccc;
+        }
+
+        .btn-back {
+            background-color: #4b0082;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #5c0fbf;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="app-header">Banco Roxo - Pagamento de Boletos</div>
+
+    <!-- Mensagem de erro, se existir -->
+    <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+
+    <!-- Tabela de boletos -->
+    <div class="table-container">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Código de Barras</th>
+                <th>Valor</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="boleto : ${boletos}">
+                <td th:text="${boleto.id}"></td>
+                <td th:text="${boleto.codigoDeBarras}"></td>
+                <td th:text="${boleto.valor}"></td>
+                <td>
+                    <span th:if="${boleto.status != null and boleto.status.toString() == 'EM_ABERTO'}" class="badge bg-success">Em Aberto</span>
+                    <span th:if="${boleto.status != null and boleto.status.toString() == 'PAGO'}" class="badge bg-secondary">Pago</span>
+                    <span th:if="${boleto.status == null}" class="badge bg-warning">Status Desconhecido</span>
+                </td>
+
+                <td>
+                    <form th:action="@{/conta-painel/cliente/viewboleto/pagarBoleto/{idConta}/{valorBoleto}(idConta=${idConta}, valorBoleto=${boleto.valor})}"
+                          method="post">
+                        <!-- Incluímos o clienteId como um campo oculto -->
+                        <input type="hidden" name="clienteId" th:value="${cliente.id}" />
+                        <button type="submit" class="btn btn-pay" th:disabled="${boleto.status == 'PAGO'}">Pagar</button>
+                    </form>
+
+
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botão de voltar -->
+    <div class="text-center mt-4">
+        <a th:href="@{/conta-painel/cliente/{clienteId}(clienteId=${cliente.id})}" class="btn btn-back">Voltar</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

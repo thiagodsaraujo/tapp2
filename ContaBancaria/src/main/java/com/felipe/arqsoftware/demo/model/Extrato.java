@@ -33,6 +33,10 @@ public class Extrato {
         this.novoSaldo = novoSaldo;
     }
 
+    public Long getContaCorrenteId() {
+        return contaCorrente != null ? contaCorrente.getId() : null;
+    }
+
 }
 
 

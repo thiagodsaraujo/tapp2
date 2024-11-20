@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class BControllerExceptionHandler {
     @ExceptionHandler(BoletoNotFoundException.class)
     public ResponseEntity<StandardError> boletoNotFoundException(BoletoNotFoundException e, HttpServletRequest request){
         HttpStatus status = HttpStatus.NO_CONTENT;
