@@ -23,6 +23,7 @@ public class ContaViewController {
     @Autowired
     private ContaCorrenteService contaCorrenteService;
 
+//    http://localhost:8081/extratos/cliente/123/export/csv
     @GetMapping("/cliente/{clienteId}")
     public String exibirPainelCliente(@PathVariable Long clienteId,
                                       @RequestParam(defaultValue = "0") int page,
