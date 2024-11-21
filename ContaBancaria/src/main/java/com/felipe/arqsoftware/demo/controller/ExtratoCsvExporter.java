@@ -13,15 +13,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-/**
- * Classe responsável por exportar uma lista de extratos para um arquivo CSV.
- */
 public class ExtratoCsvExporter extends AbstractExplorer {
 
     /**
-     * Exporta uma lista de extratos para um arquivo CSV.
+     * Exporta uma lista de extratos para um arquivo CSV e retorna ao cliente como resposta HTTP.
+     * A operação é protegida com um Circuit Breaker para garantir que falhas no serviço sejam tratadas de forma resiliente.
      *
-     * @param listExtratos A lista de extratos a ser exportada.
+     * @param listExtratos A lista de extratos a ser exportada para o arquivo CSV.
      * @param response     O objeto {@link HttpServletResponse} usado para configurar a resposta HTTP.
      * @throws IOException Se ocorrer algum erro durante a escrita do arquivo CSV.
      */
@@ -41,6 +39,7 @@ public class ExtratoCsvExporter extends AbstractExplorer {
         String[] csvHeader = {"ID do Extrato", "Conta Corrente ID", "Movimentação", "Saldo Anterior", "Novo Saldo"};
         String[] fieldMapping = {"id", "contaCorrenteId", "movimentacao", "saldoAnterior", "novoSaldo"};
 
+        // Escreve os cabeçalhos no arquivo CSV
         csvBeanWriter.writeHeader(csvHeader);
 
         // Escreve os dados dos extratos no arquivo CSV
@@ -50,5 +49,20 @@ public class ExtratoCsvExporter extends AbstractExplorer {
 
         // Fecha o escritor CSV
         csvBeanWriter.close();
+    }
+
+    /**
+     * Fallback para o método {@link #export(List, HttpServletResponse)}.
+     * Este método é chamado caso ocorra uma falha no Circuit Breaker, retornando uma resposta indicando erro no serviço.
+     *
+     * @param listExtratos A lista de extratos que seria exportada, mas não será processada devido à falha.
+     * @param response     O objeto {@link HttpServletResponse} usado para configurar a resposta HTTP.
+     * @param t            O erro que causou a falha no processo.
+     * @throws IOException Se ocorrer algum erro ao enviar a resposta de erro.
+     */
+    public void fallbackExportarCSV(List<Extrato> listExtratos, HttpServletResponse response, Throwable t) throws IOException {
+        // Configura a resposta de erro para o cliente
+        response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+        response.getWriter().write("Erro no serviço de exportação. Tente novamente mais tarde.");
     }
 }
